@@ -21,7 +21,7 @@
  ##########################
  # directories and logging
  ##########################
- "data_dir": "../data/",
+ "data_dir": "./data/",
  "output_dir": "./results/multimnist/",# where best performing model will be saved and log_dir is created 
  "restore_file": None, # checkpoint file to restore and resume training, if none, set as None
  
