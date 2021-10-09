@@ -5,7 +5,7 @@
 Please cite this article if you find this repository useful:
 
 
-
+-------------------------------------------------------------------------------------------------------
 - For data generation and loading 
 
     1) stimuli_util.ipynb includes all the codes and the instructions for how to generate the datasets for the three tasks; MultiMNIST, MultiMNIST Cluttered and MultiSVHN. 
