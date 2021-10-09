@@ -6,7 +6,7 @@
  'conv1_nfilters': 32,
  'conv2_nfilters': 32,
  'cuda': 0,
- 'data_dir': '../data/',
+ 'data_dir': './data/',
  'decoder_encoder_feedback': False,
  'device': device(type='cuda', index=0),
  'dim_objectcaps': 16,
