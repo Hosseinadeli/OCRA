@@ -1,0 +1,78 @@
+ 
+{
+ #############
+ # task info
+ #############
+ "task": "multimnist_cluttered",
+ "num_classes": 10,
+ "num_targets": 2,
+ "image_dims": (1, 100, 100),
+ "cat_dup": True, # if True, objects can come from the same category 
+ 
+ ######################
+ # training and testing
+ ######################
+ "n_epochs": 1000,
+ "lr": 0.001,
+ "train_batch_size": 128,
+ "test_batch_size": 128,
+ "cuda": 0, # cuda device number
+
+ ##########################
+ # directories and logging
+ ##########################
+ "data_dir": "../data/", 
+ "output_dir": "./results/multimnist_cluttered/", # where best performing model will be saved and log_dir is created 
+ "restore_file": None, # checkpoint file to restore and resume training, if none, set as None
+ 
+ "save_checkpoint": True, # save checkpoint
+ "record_gradnorm": False, # whether log model gradnorm to writer
+ "record_attn_hooks": False, # whether record forward and backward attention hooks
+ "validate_after_howmany_epochs": 1,  # validate after how many epoch
+ "best_val_acc": 0, # only save model that achieved val_acc above this value
+ "verbose": True, # whether print validation loss/acc
+ 
+ ####################
+ # model architecture
+ ####################
+ 
+ # read and write operations
+ "use_read_attn": True,
+ "read_size": 18,
+ "use_write_attn": True,
+ "write_size": 18,
+ 
+ # whether to apply convolutional layers to read images 
+ "use_backbone": "conv_small", # or "conv_med" with dropout and batchnorm, if False, feed raw pixels to encoder
+ "conv1_nfilters": 32,
+ "conv2_nfilters": 32,
+
+ # the number of complete cycle of encoder-decoder
+ "time_steps": 5,  
+ 
+ # encoder/decoder RNN size and whether to include xhat as input to encoder
+ "include_xhat": False,
+ "lstm_size": 512,
+ "decoder_encoder_feedback" : False,
+
+ # dynamic routing capsules
+ "use_capsnet": True, # if false, just linear readout will be used instead of capsulenet 
+ "num_zcaps": 40, # num of primary caps
+ "dim_zcaps": 8, # primary caps dim, note z_size/dim_zcaps = num_primarycaps
+ "routings": 3, # the number of dynamic routing
+ "dim_objectcaps": 16, # final class object caps
+ "backg_objcaps": 1, # the number of capsules for background
+ 
+ # decoder/reconstruction
+ "mask_objectcaps": True, # if True, use masked objectcaps for decoder 
+ "class_cond_mask": False, # if True, groundtruth info will be use to mask objectcaps, if False, use the most active one and mask others.   
+ "recon_model": True, # if True, decoder generates a reconstruction of the input (lam_recon should be also set as zero)
+ 
+ ###############
+ # loss function
+ ###############
+ "lam_recon": 175, # weight for reconstruction error 
+ "clip_c": False, # if True, clip the predicted cumulative canvas to 1 
+ "use_recon_mask": True, # if True, only consider input regions reconstructed by the model for calculating reconstruction loss
+ 
+}
