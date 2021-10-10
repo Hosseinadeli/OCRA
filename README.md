@@ -1,4 +1,4 @@
-# OCRA source code
+# OCRA (Object-Centric Recurrent Attention) source code
 
 [Hossein Adeli](https://hosseinadeli.github.io/) and [Seoyoung Ahn](https://ahnchive.github.io/)
 
