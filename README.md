@@ -154,6 +154,18 @@ prediction    [ 1, 10, 10, 10, 10]
 ground truth  [ 5,  1, 10, 10, 10]<br/>
 prediction    [ 5,  7, 10, 10, 10]
 
+-------------------------------------------------------------------------------------------------------
+Some MNIST cluttered results 
+
+Testing the model on MNIST cluttered dataset with three time steps
+
+<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/mc_grid.png">
+
+<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/mc_1.gif">
+
+<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/mc_2.gif">
+
+<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/mc_3.gif">
 
 -------------------------------------------------------------------------------------------------------
 Code references:
