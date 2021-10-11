@@ -65,25 +65,25 @@ We include many more examples of the model behavior with both 3 and 5 glimpses t
 
 ### MultiMNIST Cluttered task with 5 glimpses
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_5_time_steps_t0.gif">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_5_time_steps_t0.gif">
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image00.png">
-
--------------------------------------------------------------------------------------------------------
-
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_5_time_steps_t1.gif">
-
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image01.png">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image00.png">
 
 -------------------------------------------------------------------------------------------------------
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_5_time_steps_t2.gif">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_5_time_steps_t1.gif">
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image02.png">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image01.png">
 
 -------------------------------------------------------------------------------------------------------
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_5_time_steps_mmc.gif">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_5_time_steps_t2.gif">
+
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image02.png">
+
+-------------------------------------------------------------------------------------------------------
+
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_5_time_steps_mmc.gif">
 
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
@@ -91,25 +91,25 @@ We include many more examples of the model behavior with both 3 and 5 glimpses t
 ### MultiMNIST Cluttered task with 3 glimpses 
 
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_3_time_steps_t6.gif">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_3_time_steps_t6.gif">
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image06.png">
-
--------------------------------------------------------------------------------------------------------
-
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_3_time_steps_t7.gif">
-
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image07.png">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image06.png">
 
 -------------------------------------------------------------------------------------------------------
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_3_time_steps_t8.gif">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_3_time_steps_t7.gif">
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image08.png">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image07.png">
 
 -------------------------------------------------------------------------------------------------------
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_3_time_steps_mmc.gif">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_3_time_steps_t8.gif">
+
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image08.png">
+
+-------------------------------------------------------------------------------------------------------
+
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_3_time_steps_mmc.gif">
 
 -------------------------------------------------------------------------------------------------------
 
@@ -119,38 +119,38 @@ We train the model to "read" the digits from left to right by having the order o
 
 The top five rows show the original images, and the bottom five rows show the reconstructions
 
-![SVHN_gif](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image_grid_SVHN.png)
+![SVHN_gif](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image_grid_SVHN.png)
 
 
 The generation of sample images across 12 glimpses
 
-![SVHN_gif](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_sequences_SVHN.png)
+![SVHN_gif](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_sequences_SVHN.png)
 
 The generatin in a gif fromat 
 
-![SVHN_gif](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/generated_12_time_steps_SVHN.gif)
+![SVHN_gif](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/generated_12_time_steps_SVHN.gif)
 
 The model learns to detect and reconstruct objects. The model achieved ~2.5 percent error rate on recognizing individual digits and ~10 percent error in recognizing whole sequences still lagging SOTA performance on this measure. We believe this to be strongly related to our small two-layer convolutional backbone and we expect to get better results with a deeper one, which we plan to explore next. However, the model shows reasonable attention behavior in performing this task. 
 
 Below shows the model's read and write attention behavior as it reads and reconstructs one image.
 
-<img src="https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/image08_svhn.png">
+<img src="https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/image08_svhn.png">
 
 Herea are a few sample mistakes from our model:
 
-![SVHN_error1](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/im_t3.png)<br/>
+![SVHN_error1](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/im_t3.png)<br/>
 ground truth  [ 1, 10, 10, 10, 10]<br/>
 prediction    [ 0, 10, 10, 10, 10]
 
-![SVHN_error2](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/im_t16.png)<br/>
+![SVHN_error2](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/im_t16.png)<br/>
 ground truth  [ 2,  8, 10, 10, 10]<br/>
 prediction    [ 2,  9, 10, 10, 10]
 
-![SVHN_error3](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/im_t20.png)<br/>
+![SVHN_error3](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/im_t20.png)<br/>
 ground truth  [ 1,  2,  9, 10, 10]<br/>
 prediction    [ 1, 10, 10, 10, 10]
 
-![SVHN_error4](https://raw.githubusercontent.com/Recurrent-Attention-Models/OCRA/main/figures/im_t30.png)<br/>
+![SVHN_error4](https://raw.githubusercontent.com/hosseinadeli/OCRA/main/figures/im_t30.png)<br/>
 ground truth  [ 5,  1, 10, 10, 10]<br/>
 prediction    [ 5,  7, 10, 10, 10]
 
