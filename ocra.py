@@ -136,7 +136,6 @@ class OCRA(nn.Module):
         self.use_write_attn = args.use_write_attn  
         
         self.use_recon_mask = args.use_recon_mask
-        self.max_read_samples = args.max_read_samples
             
         if self.use_read_attn: 
             self.read_size = args.read_size
@@ -184,11 +183,6 @@ class OCRA(nn.Module):
         # the number of complete cycle of encoder-decoder 
         self.time_steps = args.time_steps
         
-#         if self.task == "MultiMNIST_tracking":
-#             self.num_steps = self.time_steps-1
-#         else:
-#             self.num_steps = self.time_steps
-        
         # encoder RNN 
         self.include_xhat = args.include_xhat #xhat: the diff btw the most recent cumulative canvas and the input image
         self.lstm_size = args.lstm_size
@@ -200,10 +194,7 @@ class OCRA(nn.Module):
             elif self.read_size == 12:
                 bb2encoder_size = 288
         else:
-            if self.task=="multimnist_tracking":
-                bb2encoder_size = 32*16*16
-            else:
-                bb2encoder_size = 32*9*9
+            bb2encoder_size = 32*9*9
             
         #if (self.conv2_nfilters == 64) and self.use_backbone:
         self.encoder_input_size = int(self.conv2_nfilters/32) * bb2encoder_size
@@ -225,7 +216,7 @@ class OCRA(nn.Module):
         self.z_size = self.num_zcaps * self.dim_zcaps
         self.z_linear = nn.Linear(self.lstm_size, self.z_size)
         if self.use_capsnet:
-            # dynamic routing capsules
+        # dynamic routing capsules
             self.routings = args.routings  # number of dynamic routings between two capsule layers 
             self.num_objectcaps = args.num_classes + args.backg_objcaps  # number of final class object caps
             self.dim_objectcaps = args.dim_objectcaps # final class object caps dim
@@ -327,7 +318,7 @@ class OCRA(nn.Module):
         # initialize read output in orginal coords and objcaps length (these will culmulate over timesteps)
         read_x_step = torch.zeros(batch_size, self.time_steps, self.C*self.H*self.W).to(device)        
         objcaps_len_sum = torch.zeros(batch_size, self.num_objectcaps).to(device)
-        objcaps_len_step = torch.zeros(batch_size, self.time_steps-1, self.num_objectcaps).to(device) 
+        objcaps_len_step = torch.zeros(batch_size, self.time_steps, self.num_objectcaps).to(device) 
         objcaps_step = torch.zeros(batch_size, self.time_steps, self.num_objectcaps*self.dim_objectcaps).to(device) 
         
         readout_logits = torch.zeros(batch_size, self.num_targets*self.num_classes).to(device) 
@@ -338,18 +329,13 @@ class OCRA(nn.Module):
         c_catmasked = torch.zeros(batch_size, self.num_objectcaps, self.C*self.H*self.W).to(device)  
 
         # run model forward
-        for t in range(self.time_steps-1):
-
-            if self.task == "multimnist_tracking":
-                x_t = x.narrow(1,t,1).to(x.device)  # .view(-1, self.time_steps, self.C, self.H, self.W)
-                x_hat = x_t
-            else:
-                x_t = x
-                x_hat = x_t.view(x_t.shape[0], -1) - c 
+        for t in range(self.time_steps):
+            
             # xhat: diff btw recent canvas and the orginal image, whatever left to be reconstructed 
+            x_hat = x.to(c.device) - c  
                      
             # get read outputs (see function read for details)   
-            new_x, new_x_hat, read_att_param = self.read(x_t, x_hat, h_dec)
+            new_x, new_x_hat, read_att_param = self.read(x, x_hat, h_dec)
             
             # whether to pass xhat reads to encoder
             # if using convolutional read, it is better not to include the x_hat
@@ -360,9 +346,8 @@ class OCRA(nn.Module):
 
             #Use these two lines to limit the number of samples the model can take
 #             allowed_num_samples = 2
-            if t>= self.max_read_samples:
-                r = torch.zeros(r.shape).to(device) #batch_size,2*self.read_size*self.read_size*self.C)
-                new_x = torch.zeros(new_x.shape).to(device) #batch_size,2*self.read_size*self.read_size*self.C)
+#             if t>= allowed_num_samples:
+#                 r  = torch.zeros(batch_size,2*self.read_size*self.read_size*self.C).to(device)
       
             # store read attn param and read outputs
             if self.use_read_attn:
@@ -396,7 +381,7 @@ class OCRA(nn.Module):
             z_sample = self.z_linear(h_enc) # (n_batch, self.z_size)
             if self.use_capsnet:      
                 # linear transformation to form primary capsules  
-                z_sample = self.z_linear(h_enc) # (n_batch, self.z_size)
+                
                 zcaps = z_sample.contiguous().view(z_sample.size(0), -1, self.dim_zcaps) # (n_batch, z_size/z_dim, dim_zcaps)
 
                 # class object capsules with dynamic routing (see DenseCapsule for details) 
@@ -542,20 +527,13 @@ def loss_fn(objcaps_len_step, read_x_step, c_step, readout_logits, x, y_true, ar
         
     #######   Reconstruction Loss      #######
     
-    if args.task == "multimnist_tracking":
-        x = x.narrow(1,1,args.time_steps-1)
-        c = c_step.narrow(1,0,args.time_steps-1)
-    else:
-        c = torch.sum(c_step, dim=1)
+    c = torch.sum(c_step, dim=1)
     
     # use recon mask to focus the ground truth reconstruction on the relevant stuff (what has been read by the model)
     if (args.use_recon_mask):
         read_x_sum = torch.sum(read_x_step, dim=1)
         recon_mask = read_x_sum/torch.max(read_x_sum, dim=1, keepdim=True)[0]
         x = .3*x + .7*recon_mask*x 
-    
-    x = x.view(x.shape[0],-1)
-    c = c.view(c.shape[0],-1)
     
     # clip the predicted cumulative canvas so that the model can overlap object reconstructions without increasing error
     if (args.clip_c):
@@ -710,10 +688,7 @@ def cal_accs(y_pred_nar, y_true, readout_logits, args):
         
                     
     elif args.cat_dup == False: # when no duplicates
-        #print('no dup')
         y_pred_hot = (y_pred_nar >= y_pred_nar.topk(n_targets)[0][:,n_targets-1:n_targets]) # bool indices of predictions higher/equal than n_target highest value y_pred = [1.0,0.9,0.1] --> [1, 1, 0]
-#         print(y_pred_hot)
-#         print(y_true)
         partial_accs = torch.sum(y_pred_hot*y_true, dim=1)/float(n_targets) 
         partial_accuracy = partial_accs.cpu().sum().item() 
         exact_accs = (partial_accs >= 1)
@@ -762,7 +737,7 @@ def evaluate(model, x, y_true, loss_fn, args, epoch=None):
     model.eval()
     
     # load testing dataset on device
-    x = x.float().to(args.device)  # .view(x.shape[0], -1)
+    x = x.view(x.shape[0], -1).float().to(args.device)
     
     if args.task == 'mnist_ctrv':
         x = 1.0 - x
@@ -804,12 +779,6 @@ def test(model, dataloader, args):
     test_acc_partial = 0
     test_acc_exact = 0
     
-    all_c_each_step = []
-    all_y_pred = []
-    all_objcaps_len_step = []
-    xs = []
-    ys = []
-    
     # load batch data
     for x, y in dataloader:
         
@@ -827,16 +796,8 @@ def test(model, dataloader, args):
         test_loss += args.test_batch_size * batch_loss
         test_L_recon += args.test_batch_size * batch_L_recon
         test_L_margin += args.test_batch_size * batch_L_margin
-        
         test_acc_partial += batch_acc_partial
         test_acc_exact += batch_acc_exact
-        
-        all_c_each_step.append(c_each_step)
-        all_y_pred.append(y_pred)
-        all_objcaps_len_step.append(objcaps_len_step)
-        
-        xs.append(x)
-        ys.append(y)
 
     # get average loss and acc
     test_loss /= len(dataloader.dataset)
@@ -844,8 +805,7 @@ def test(model, dataloader, args):
     test_L_margin /= len(dataloader.dataset)
     test_acc_partial /= (len(dataloader.dataset))
     test_acc_exact /= (len(dataloader.dataset))
-    
-    return test_loss, test_L_recon, test_L_margin, test_acc_partial, test_acc_exact, torch.vstack(all_c_each_step), torch.vstack(all_y_pred), torch.vstack(all_objcaps_len_step), torch.vstack(xs), torch.vstack(ys)
+    return test_loss, test_L_recon, test_L_margin, test_acc_partial, test_acc_exact
 
 
 
@@ -873,8 +833,7 @@ def train_epoch(model, train_dataloader, loss_fn, optimizer, epoch, writer, args
                     y = torch.zeros(y.size(0), args.num_classes).scatter_(1, y.view(-1, 1), 1.) 
             
             # load dataset on device
-            #x = x.view(x.shape[0], -1).to(args.device)
-            x = x.to(args.device)
+            x = x.view(x.shape[0], -1).to(args.device)
             
             if args.task == 'mnist_ctrv':
                 x = 1.0 - x
@@ -947,7 +906,7 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, loss_fn, optimiz
         
         # compute validation loss and acc
         if (epoch) % args.validate_after_howmany_epochs == 0:
-            val_loss, val_L_recon, val_L_margin, val_acc_partial, val_acc_exact,_,_,_,_,_ = test(model, val_dataloader, args)
+            val_loss, val_L_recon, val_L_margin, val_acc_partial, val_acc_exact = test(model, val_dataloader, args)
             
             # logging validation info to tensorboard writer
             writer.add_scalar('Val/Loss', val_loss, epoch)
@@ -956,29 +915,16 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, loss_fn, optimiz
             writer.add_scalar('Val/Accuracy_partial', val_acc_partial, epoch)
             writer.add_scalar('Val/Accuracy_exact', val_acc_exact, epoch)
                         
-                
-            if args.val_measure == 'ACC':    
-                if args.verbose:
-                    print("==> Epoch %02d: train_loss=%.5f, val_loss=%.5f, val_L_recon=%.5f, val_L_margin=%.5f, val_acc_partial=%.4f,  val_acc_exact=%.4f" \
-                      % (epoch, train_loss, val_loss, val_L_recon, val_L_margin, val_acc_partial, val_acc_exact))
-
-                # update best validation acc and save best model to output dir
-                if (val_acc_exact > args.best_val_msr):  
-                    args.best_val_msr = val_acc_exact
-                    torch.save(model.state_dict(), args.log_dir +'/best_model_epoch%d_acc%.4f.pt'% (epoch, val_acc_exact))  #output_dir
-                    print("the model with best val_acc (%.4f) was saved to disk" % val_acc_exact)
-
-            elif args.val_measure == 'recon_loss':
-                if args.verbose:
-                    print("==> Epoch %02d: train_loss=%.5f, val_loss=%.5f, val_L_recon=%.5f, val_L_margin=%.5f, val_acc=%.4f" % (epoch, train_loss, val_loss, val_L_recon, val_L_margin, val_acc_exact))
+            if args.verbose:
+                print("==> Epoch %02d: train_loss=%.5f, val_loss=%.5f, val_L_recon=%.5f, val_L_margin=%.5f, val_acc_partial=%.4f,  val_acc_exact=%.4f" \
+                  % (epoch, train_loss, val_loss, val_L_recon, val_L_margin, val_acc_partial, val_acc_exact))
                
-                # update best validation acc and save best model to output dir
-                if (val_L_recon <= args.best_val_msr):  
-                    args.best_val_msr = val_L_recon
-                    torch.save(model.state_dict(), args.log_dir +'/best_model_epoch%d_acc_%.4f_recon_loss_%.4f.pt'% (epoch, val_acc_exact, args.best_val_msr))  #output_dir
-                    print("the model with best recon loss (%.4f) was saved to disk" % args.best_val_msr)
-                    
-                    
+            # update best validation acc and save best model to output dir
+            if (val_acc_exact > args.best_val_acc):  
+                args.best_val_acc = val_acc_exact
+                torch.save(model.state_dict(), args.log_dir +'/best_model_epoch%d_acc%.4f.pt'% (epoch, val_acc_exact))  #output_dir
+                print("the model with best val_acc (%.4f) was saved to disk" % val_acc_exact)
+
         # for experiments, abort the local mimima trials
         if (epoch) % 100 == 0:
             if hasattr(args, 'abort_if_valacc_below'):
