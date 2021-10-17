@@ -795,7 +795,7 @@ def test(model, dataloader, args):
         # aggregate loss and acc
         test_loss += args.test_batch_size * batch_loss
         test_L_recon += args.test_batch_size * batch_L_recon
-        test_L_margin += args.test_batch_size * batch_L_margin
+        test_L_margin += args.test_batch_size * batch_L_margin 
         test_acc_partial += batch_acc_partial
         test_acc_exact += batch_acc_exact
 
