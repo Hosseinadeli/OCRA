@@ -210,12 +210,13 @@ class OCRA(nn.Module):
             self.encoder = nn.LSTMCell((self.include_xhat+1)*self.read_size*self.read_size*self.C+self.lstm_size, self.lstm_size)
         
         self.use_capsnet = args.use_capsnet
+        
+        self.num_zcaps = args.num_zcaps # size of linear layer from encoder to primary caps
+        self.dim_zcaps = args.dim_zcaps # primary caps dim
+        self.z_size = self.num_zcaps * self.dim_zcaps
+        self.z_linear = nn.Linear(self.lstm_size, self.z_size)
         if self.use_capsnet:
         # dynamic routing capsules
-            self.num_zcaps = args.num_zcaps # size of linear layer from encoder to primary caps
-            self.dim_zcaps = args.dim_zcaps # primary caps dim
-            self.z_size = self.num_zcaps * self.dim_zcaps
-            self.z_linear = nn.Linear(self.lstm_size, self.z_size)
             self.routings = args.routings  # number of dynamic routings between two capsule layers 
             self.num_objectcaps = args.num_classes + args.backg_objcaps  # number of final class object caps
             self.dim_objectcaps = args.dim_objectcaps # final class object caps dim
@@ -225,7 +226,7 @@ class OCRA(nn.Module):
         else:
             self.num_objectcaps = args.num_classes + args.backg_objcaps  # number of final class object caps
             self.dim_objectcaps = args.dim_objectcaps # final class object caps dim
-            self.fc_linear = nn.Linear(self.lstm_size, self.num_objectcaps*self.dim_objectcaps)
+            self.fc_linear = nn.Linear(self.z_size, self.num_objectcaps*self.dim_objectcaps)
             self.output_linear = nn.Linear(self.num_objectcaps*self.dim_objectcaps, self.num_objectcaps)
             self.softmax = nn.Softmax(dim=1)
             
@@ -377,9 +378,10 @@ class OCRA(nn.Module):
             else:
                 h_enc, c_enc = self.encoder(r, (h_enc, c_enc))
  
+            z_sample = self.z_linear(h_enc) # (n_batch, self.z_size)
             if self.use_capsnet:      
                 # linear transformation to form primary capsules  
-                z_sample = self.z_linear(h_enc) # (n_batch, self.z_size)
+                
                 zcaps = z_sample.contiguous().view(z_sample.size(0), -1, self.dim_zcaps) # (n_batch, z_size/z_dim, dim_zcaps)
 
                 # class object capsules with dynamic routing (see DenseCapsule for details) 
@@ -406,7 +408,7 @@ class OCRA(nn.Module):
                 objcaps_step[:,t:t+1,:] = torch.unsqueeze(objectcaps_re, 1)
                 
             else:
-                linear_readout = self.fc_linear(h_enc)
+                linear_readout = self.fc_linear(z_sample)
                 
                 # get softmax output, treated as analogue to the length of object capsule for each step and cumulate for predicting categories
                 output = self.output_linear(linear_readout) # for classification
