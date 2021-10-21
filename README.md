@@ -7,9 +7,9 @@ Please cite this article if you find this repository useful:
 [Recurrent Attention Models with Object-centric Capsule Representation for Multi-object Recognition](https://arxiv.org/abs/2110.04954)<br/>
 H Adeli, S Ahn, G Zelinsky - arXiv preprint arXiv:2110.04954, 2021 - arxiv.org <br/>
 
-[pdf](https://arxiv.org/pdf/2110.04954.pdf)
+[pdf](https://arxiv.org/pdf/2110.04954.pdf/)
 
-[google scholar](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=EdIFZpQAAAAJ&sortby=pubdate&citation_for_view=EdIFZpQAAAAJ:mVmsd5A6BfQC)
+[google scholar](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=EdIFZpQAAAAJ&sortby=pubdate&citation_for_view=EdIFZpQAAAAJ:mVmsd5A6BfQC/)
 -------------------------------------------------------------------------------------------------------
 - For data generation and loading 
 
