@@ -13,7 +13,7 @@ Adeli, H., Ahn, S., & Zelinsky, G. (2021). Recurrent Attention Models with Objec
 &nbsp;&nbsp;year={2021}<br/>
 }
 
-[Short presentation of the work](https://youtu.be/1MpTtFZx2AY)
+[![Short presentation of the work](https://img.youtube.com/vi/1MpTtFZx2AY/0.jpg)](https://youtu.be/1MpTtFZx2AY)
 
 -------------------------------------------------------------------------------------------------------
 - For data generation and loading 
