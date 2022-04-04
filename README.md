@@ -38,15 +38,6 @@ Short presentation of the work:<br/>
     
     OCRA_demo-cluttered_5steps_loadtrained.ipynb shows how to load a trained model and test it on the test dataset. Example pretrained models are included in the repository under pretrained folder. [Download](https://drive.google.com/drive/folders/1lBdcMmCdDjumpAm2wlex-PAJm5Wwxtsz?usp=sharing) all the pretrained models. 
     
-    
-
-<!-- # Image-level accuracy averaged from 5 runs -->
-
-<!-- | Task (Model name)                     | Error Rate (SD) |
-|---------------------------------------|-----------------|
-| MultiMNIST (OCRA-10glimpse)           | 5.08 (0.17)     |
-| Cluttered MultiMNIST (OCRA-7glimpse)  | 7.12 (1.05)     |
-| MultiSVHN (OCRA-12glimpse)            | 10.07 (0.53)    | -->
 
 # Validation losses during training
 
