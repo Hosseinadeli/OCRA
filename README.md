@@ -40,13 +40,13 @@ Short presentation of the work:<br/>
     
     
 
-# Image-level accuracy averaged from 5 runs
+<!-- # Image-level accuracy averaged from 5 runs -->
 
-| Task (Model name)                     | Error Rate (SD) |
+<!-- | Task (Model name)                     | Error Rate (SD) |
 |---------------------------------------|-----------------|
 | MultiMNIST (OCRA-10glimpse)           | 5.08 (0.17)     |
 | Cluttered MultiMNIST (OCRA-7glimpse)  | 7.12 (1.05)     |
-| MultiSVHN (OCRA-12glimpse)            | 10.07 (0.53)    |
+| MultiSVHN (OCRA-12glimpse)            | 10.07 (0.53)    | -->
 
 # Validation losses during training
 
