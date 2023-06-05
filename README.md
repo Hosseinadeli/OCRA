@@ -4,14 +4,20 @@
 
 Please cite this article if you find this repository useful:
 
-Adeli, H., Ahn, S., & Zelinsky, G. (2021). Recurrent Attention Models with Object-centric Capsule Representation for Multi-object Recognition. arXiv preprint arXiv:2110.04954. [[arxiv](https://arxiv.org/abs/2110.04954)][[pdf](https://arxiv.org/pdf/2110.04954.pdf)] <br/>
+Adeli, H., Ahn, S., & Zelinsky, G. J. (2023). A brain-inspired object-based attention network for multiobject recognition and visual reasoning. Journal of Vision, 23(5), 16-16. [link](https://jov.arvojournals.org/article.aspx?articleid=2785636)]<br/>
 
-@article{adeli2021recurrent,<br/>
-&nbsp;&nbsp;title={Recurrent Attention Models with Object-centric Capsule Representation for Multi-object Recognition},<br/>
-&nbsp;&nbsp;author={Adeli, Hossein and Ahn, Seoyoung and Zelinsky, Gregory},<br/>
-&nbsp;&nbsp;journal={arXiv preprint arXiv:2110.04954},<br/>
-&nbsp;&nbsp;year={2021}<br/>
+``` bibtex
+@article{adeli2023brain,
+  title={A brain-inspired object-based attention network for multiobject recognition and visual reasoning},
+  author={Adeli, Hossein and Ahn, Seoyoung and Zelinsky, Gregory J},
+  journal={Journal of Vision},
+  volume={23},
+  number={5},
+  pages={16--16},
+  year={2023},
+  publisher={The Association for Research in Vision and Ophthalmology}
 }
+```
 
 Short presentation of the work:<br/>
 [![Short presentation of the work](https://img.youtube.com/vi/1MpTtFZx2AY/0.jpg)](https://youtu.be/1MpTtFZx2AY)
