@@ -4,7 +4,7 @@
 
 Please cite this article if you find this repository useful:
 
-Adeli, H., Ahn, S., & Zelinsky, G. J. (2023). A brain-inspired object-based attention network for multiobject recognition and visual reasoning. Journal of Vision, 23(5), 16-16. [[link](https://jov.arvojournals.org/article.aspx?articleid=2785636)]<br/>
+Adeli, H., Ahn, S., & Zelinsky, G. J. (2023). A brain-inspired object-based attention network for multiobject recognition and visual reasoning. Journal of Vision, 23(5), 16-16. [[link](https://jov.arvojournals.org/article.aspx?articleid=2785636)] [google scholar](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=EdIFZpQAAAAJ&sortby=pubdate&citation_for_view=EdIFZpQAAAAJ:qUcmZB5y_30C)]<br/>
 
 ``` bibtex
 @article{adeli2023brain,
